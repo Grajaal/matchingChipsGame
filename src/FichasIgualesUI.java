@@ -2,41 +2,47 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FichasIgualesUI {
-    public Tablero[] init() {
+    public ArrayList<Tablero> init() {
         Scanner scanner = new Scanner(System.in);
 
         // Lee el número de juegos que el jugador quiere jugar.
         int numJuegos = Integer.parseInt(scanner.nextLine());
         if (numJuegos < 1)
             System.exit(0);
-        if(scanner.nextLine().length() != 0)
-            System.exit(0); 
+        if (scanner.nextLine().length() != 0)
+            System.exit(0);
 
         String fila;
         int columnasObjetivo;
-        ArrayList<ArrayList<String>> entradasUsuario = new ArrayList<>(numJuegos);
+        ArrayList<ArrayList<String>> entradasUsuario = new ArrayList<>();
         for (int i = 0; i < numJuegos; i++)
             entradasUsuario.add(new ArrayList<>());
-        Tablero[] juegos = new Tablero[numJuegos];
+        ArrayList<Tablero> juegos = new ArrayList<>();
 
+        boolean isCorrect = true;
         for (int i = 0; i < numJuegos; i++) {
-            fila = scanner.nextLine();
-            if (!coloresCorrectos(fila))
-                System.exit(0);
-            columnasObjetivo = fila.length();
-            if (columnasObjetivo > 20 || columnasObjetivo == 0)
-                System.exit(0);
-            entradasUsuario.get(i).add(fila);
-
-            while (scanner.hasNextLine() && !(fila = scanner.nextLine()).isEmpty()) {
-                if (fila.length() != columnasObjetivo)
-                    System.exit(0);
+            if (isCorrect) {
+                fila = scanner.nextLine();
                 if (!coloresCorrectos(fila))
-                    System.exit(0);
-
+                    isCorrect = false;
+                columnasObjetivo = fila.length();
+                if (columnasObjetivo > 20 || columnasObjetivo == 0)
+                    isCorrect = false;
                 entradasUsuario.get(i).add(fila);
+
+                while (scanner.hasNextLine() && !(fila = scanner.nextLine()).isEmpty()) {
+                    if (isCorrect && fila.length() != columnasObjetivo || !coloresCorrectos(fila))
+                        isCorrect = false;
+
+                    entradasUsuario.get(i).add(fila);
+                }
+            } else {
+                while (scanner.hasNextLine() && !(fila = scanner.nextLine()).isEmpty()) {
+                }
             }
-            juegos[i] = new Tablero(convertirArrayChar(entradasUsuario.get(i)));
+
+            if (isCorrect)
+                juegos.add(new Tablero(convertirArrayChar(entradasUsuario.get(i))));
         }
         scanner.close();
         return juegos;
