@@ -50,7 +50,7 @@ public class Tablero {
     }
 
     public boolean fin() {
-        return this.getNumFichas() < 4 && this.comprobarNumeroFichasDeColor('A') < 2 &&
+        return this.comprobarNumeroFichasDeColor('A') < 2 &&
                 this.comprobarNumeroFichasDeColor('R') < 2 && this.comprobarNumeroFichasDeColor('V') < 2;
     }
 

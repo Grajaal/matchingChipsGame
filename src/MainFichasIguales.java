@@ -1,12 +1,10 @@
-import java.util.ArrayList;
-
 public class MainFichasIguales {
     public static void main(String[] args) throws Exception {
 
-        new GUI();
+        GUI gui = new GUI();
         FichasIgualesUI uiText = new FichasIgualesUI();
-        ArrayList<Tablero> juegos = uiText.init();
-        FichasIguales fichasIguales = new FichasIguales(juegos);
+        Tablero juego = uiText.init(gui);
+        FichasIguales fichasIguales = new FichasIguales(juego);
         fichasIguales.jugar();
 
     }

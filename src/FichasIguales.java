@@ -2,84 +2,66 @@ import java.util.ArrayList;
 
 public class FichasIguales {
 
-    private ArrayList<Tablero> juegos;
-    private ArrayList<ArrayList<Movimiento>> movimientosSoluciones;
+    private Tablero juego;
+    private ArrayList<Movimiento> movimientosSolucion;
     private Tablero tableroSolucion;
-    int numJuegos;
 
-    public FichasIguales(ArrayList<Tablero> juegos) {
-        this.movimientosSoluciones = new ArrayList<>();
-        this.juegos = juegos;
-        this.numJuegos = juegos.size();
+    public FichasIguales(Tablero juego) {
+        this.movimientosSolucion = new ArrayList<>();
+        this.juego = juego;
     }
 
     public void jugar() {
-        for (int i = 1; i <= this.numJuegos; i++) {
-            this.tableroSolucion = new Tablero(juegos.get(i - 1));
-            movimientosSoluciones.add(new ArrayList<>());
-            System.out.println("Juego " + i + ":");
-            buscarMejorMovimiento(juegos.get(i - 1), new ArrayList<>());
-            int nSoluciones = this.movimientosSoluciones.size();
+        this.tableroSolucion = new Tablero(juego);
+        buscarMejorMovimiento(juego, new ArrayList<>());
 
-            for (int j = 1; j <= this.movimientosSoluciones.size(); j++) {
-                System.out.println("Solución " + j + " de " + nSoluciones + ":");
-                for (int k = 1; k <= this.movimientosSoluciones.get(j - 1).size(); k++) {
+        for (int i = 1; i <= this.movimientosSolucion.size(); i++) {
 
-                    String fichasFormat, puntosFormat;
-                    if (this.movimientosSoluciones.get(j - 1).get(k - 1).getNumFichasEliminadas() == 1)
-                        fichasFormat = "ficha";
-                    else
-                        fichasFormat = "fichas";
+            String fichasFormat, puntosFormat;
+            if (this.movimientosSolucion.get(i - 1).getNumFichasEliminadas() == 1)
+                fichasFormat = "ficha";
+            else
+                fichasFormat = "fichas";
 
-                    if (this.movimientosSoluciones.get(j - 1).get(k - 1).getScore() == 1)
-                        puntosFormat = "punto";
-                    else
-                        puntosFormat = "puntos";
+            if (this.movimientosSolucion.get(i - 1).getScore() == 1)
+                puntosFormat = "punto";
+            else
+                puntosFormat = "puntos";
 
-                    System.out.println("Movimiento " + k + " en (" +
-                            (this.tableroSolucion.getFilas()
-                                    - this.movimientosSoluciones.get(j - 1).get(k - 1).getFila())
-                            + ", " +
-                            (this.movimientosSoluciones.get(j - 1).get(k - 1).getColumna() + 1) +
-                            "): eliminó " + this.movimientosSoluciones.get(j - 1).get(k - 1).getNumFichasEliminadas()
-                            + " "
-                            + fichasFormat +
-                            " de color " + this.movimientosSoluciones.get(j - 1).get(k - 1).getColor() +
-                            " y obtuvo " + this.movimientosSoluciones.get(j - 1).get(k - 1).getScore() + " "
-                            + puntosFormat
-                            + ".");
-                }
-
-                String fichasFormat;
-                if (this.tableroSolucion.getNumFichas() == 1)
-                    fichasFormat = "ficha";
-                else
-                    fichasFormat = "fichas";
-
-                System.out.println("Puntuación final: "
-                        + calcularScore(this.tableroSolucion, this.movimientosSoluciones.get(j - 1))
-                        + ", quedando " + this.tableroSolucion.getNumFichas() + " " + fichasFormat
-                        + ".");
-
-            }
-            if (i != this.numJuegos)
-                System.out.println();
-
+            System.out.println("Movimiento " + i + " en (" +
+                    (this.tableroSolucion.getFilas()
+                            - this.movimientosSolucion.get(i - 1).getFila())
+                    + ", " +
+                    (this.movimientosSolucion.get(i - 1).getColumna() + 1) +
+                    "): eliminó " + this.movimientosSolucion.get(i - 1).getNumFichasEliminadas()
+                    + " "
+                    + fichasFormat +
+                    " de color " + this.movimientosSolucion.get(i - 1).getColor() +
+                    " y obtuvo " + this.movimientosSolucion.get(i - 1).getScore() + " "
+                    + puntosFormat
+                    + ".");
         }
+
+        String fichasFormat;
+        if (this.tableroSolucion.getNumFichas() == 1)
+            fichasFormat = "ficha";
+        else
+            fichasFormat = "fichas";
+
+        System.out.println("Puntuación final: "
+                + calcularScore(this.tableroSolucion, this.movimientosSolucion)
+                + ", quedando " + this.tableroSolucion.getNumFichas() + " " + fichasFormat
+                + ".");
+
     }
 
     public void buscarMejorMovimiento(Tablero tablero, ArrayList<Movimiento> movimientos) {
         if (tablero.fin()) {
             int score = calcularScore(tablero, movimientos);
-            int bestScore = calcularScore(this.tableroSolucion, this.movimientosSoluciones.get(0));
+            int bestScore = calcularScore(this.tableroSolucion, this.movimientosSolucion);
             if (bestScore == 0 || score > bestScore) {
-                if (movimientosSoluciones.size() > 0)
-                    movimientosSoluciones.removeAll(movimientosSoluciones);
-                movimientosSoluciones.add(new ArrayList<>(movimientos));
+                movimientosSolucion = new ArrayList<Movimiento>(movimientos);
                 tableroSolucion = new Tablero(tablero);
-            }
-            if (score == bestScore) {
-                movimientosSoluciones.add(new ArrayList<>(movimientos));
             }
         }
 
