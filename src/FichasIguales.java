@@ -14,45 +14,6 @@ public class FichasIguales {
     public void jugar() {
         this.tableroSolucion = new Tablero(juego);
         buscarMejorMovimiento(juego, new ArrayList<>());
-
-        for (int i = 1; i <= this.movimientosSolucion.size(); i++) {
-
-            String fichasFormat, puntosFormat;
-            if (this.movimientosSolucion.get(i - 1).getNumFichasEliminadas() == 1)
-                fichasFormat = "ficha";
-            else
-                fichasFormat = "fichas";
-
-            if (this.movimientosSolucion.get(i - 1).getScore() == 1)
-                puntosFormat = "punto";
-            else
-                puntosFormat = "puntos";
-
-            System.out.println("Movimiento " + i + " en (" +
-                    (this.tableroSolucion.getFilas()
-                            - this.movimientosSolucion.get(i - 1).getFila())
-                    + ", " +
-                    (this.movimientosSolucion.get(i - 1).getColumna() + 1) +
-                    "): eliminó " + this.movimientosSolucion.get(i - 1).getNumFichasEliminadas()
-                    + " "
-                    + fichasFormat +
-                    " de color " + this.movimientosSolucion.get(i - 1).getColor() +
-                    " y obtuvo " + this.movimientosSolucion.get(i - 1).getScore() + " "
-                    + puntosFormat
-                    + ".");
-        }
-
-        String fichasFormat;
-        if (this.tableroSolucion.getNumFichas() == 1)
-            fichasFormat = "ficha";
-        else
-            fichasFormat = "fichas";
-
-        System.out.println("Puntuación final: "
-                + calcularScore(this.tableroSolucion, this.movimientosSolucion)
-                + ", quedando " + this.tableroSolucion.getNumFichas() + " " + fichasFormat
-                + ".");
-
     }
 
     public void buscarMejorMovimiento(Tablero tablero, ArrayList<Movimiento> movimientos) {
@@ -104,9 +65,13 @@ public class FichasIguales {
         return score;
     }
 
-    // public void setTablero(Tablero origenTablero, Tablero nuevoTablero){
-    // nuevoTablero.setFichas(origenTablero.copyOf().getFichas());
-    // nuevoTablero.setScore(origenTablero.getScore());
-    // nuevoTablero.setNumFichas(origenTablero.getNumFichas());
-    // }
+    public Tablero getTableroSolucion() {
+
+        return this.tableroSolucion;
+    }
+
+    public ArrayList<Movimiento> getMovimientosSolucion() {
+        return this.movimientosSolucion;
+    }
+
 }
